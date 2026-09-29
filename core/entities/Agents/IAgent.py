@@ -1,15 +1,23 @@
+"""
+Search agent base class.
+"""
+
 from abc import abstractmethod, ABC
 
 from playwright.sync_api import sync_playwright, Browser, Page
 
+from core.entities.Vacancy import Vacancy
 
-class Agent(ABC):
+
+class IAgent(ABC):
     """
     Search agent base class.
     """
 
     start_link: str
     agent_name: str
+    later_see: list[Vacancy]
+    favourite: list[Vacancy]
 
     @abstractmethod
     def login(self) -> None:
@@ -26,7 +34,7 @@ class Agent(ABC):
         pass
 
     @abstractmethod
-    def add_to_favourite(self) -> None:
+    def add_to_later(self) -> None:
         """
         Add vacancy to favourites, maybe you are not acceptable, but in future want to be
         """
@@ -45,6 +53,9 @@ class Agent(ABC):
 
     @staticmethod
     def open_browser(start_link: str) -> tuple[Browser, Page] | None:
+        """
+        Open browser
+        """
         print('Open browser')
         try:
             with sync_playwright() as p:

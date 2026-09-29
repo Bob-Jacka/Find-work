@@ -1,35 +1,41 @@
-from core.entities.Agents.Agent import Agent
+"""
+Main agent to use, because hh is the major
+"""
+
+from core.entities.Agents.IAgent import IAgent
 
 
-class _Login_page:
-    telephone_field: str
-    sign_in_btn: str
+class Page_objects:
+    class _Login_page:
+        telephone_field: str
+        sign_in_btn: str
 
-    def __init__(self, page):
-        pass
+        def __init__(self, page):
+            pass
+
+    class _Vacancy_page:
+        def __init__(self, page):
+            pass
 
 
-class _Vacancy_page:
-    def __init__(self, page):
-        pass
-
-
-class HH_agent(Agent):
+class HH_agent(IAgent):
 
     def __init__(self, config):
         self.agent_name = 'HH agent'
         self.config_ptr = config
+        self.favourite = list()
+        self.later_see = list()
 
     def login(self) -> None:
         browser, page = self.open_browser(self.config_ptr.vacancy_sites['hh'])
         self.config_ptr.browsers.append(browser)
 
-        login_page = _Login_page(page)
+        login_page = Page_objects._Login_page(page)
 
     def search(self) -> None:
         print(f'{self.agent_name} started working')
 
-    def add_to_favourite(self) -> None:
+    def add_to_later(self) -> None:
         pass
 
     def add_to_interesting(self) -> None:

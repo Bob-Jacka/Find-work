@@ -1,3 +1,8 @@
+try:
+    import ai_lib
+except ModuleNotFoundError:
+    print('Import private local ai lib first')
+
 class AI:
     """
     AI functionality to help find work
@@ -12,8 +17,14 @@ class AI:
         """
         pass
 
-    def generate_cv(self) -> str:
+    def generate_covering_letter(self) -> str:
         """
-        Generate text (covering later) to support your application
+        Generate text (covering later) to support your application and resume
+        """
+        pass
+
+    def check_resume(self):
+        """
+        Check your résumé and give advices to you
         """
         pass
