@@ -2,11 +2,10 @@ import signal
 
 from core.data.Config import Config
 from core.entities.App import App
-from core.utils.BotLogger import BotLogger
-from core.utils.Utilities import Format
 
 try:
-    import common_py_lib
+    from common_py_lib.logger.CommonLogger import CommonLogger
+    from common_py_lib.entities.Formatter import TextAnsiFormatter
 except ModuleNotFoundError:
     print('Import private local module common py lib first')
 
@@ -14,7 +13,7 @@ except ModuleNotFoundError:
 def signal_handler(sig, frame):
     """
     Handle sig int command
-    :param sig: signal
+    :param sig: signal that handled
     :param frame: function to execute in case of signal
     :return: None
     """
@@ -25,17 +24,17 @@ def signal_handler(sig, frame):
 
 def graceful_exit_from_app():
     app.close_app()
-    Format.prYellow("Out program")
+    TextAnsiFormatter.prYellow("Out program")
 
 
-logger: BotLogger = BotLogger()  # global instance of logger
+logger: CommonLogger = CommonLogger()  # global instance of logger
 config: Config = Config()
 app: App
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)  # if program goes wrong
 
-    app = App(config, logger)
+    app = App(config_ptr=config, logger_ptr=logger)
     app.init_agents()
 
     app.start_app()

@@ -33,12 +33,15 @@ class HH_agent(IAgent):
         login_page = Page_objects._Login_page(page)
 
     def search(self) -> None:
-        print(f'{self.agent_name} started working')
+        print(f'{self.agent_name} started working at {IAgent.current_time()}')
+        # search logic:
+        self.login()
+        print(f'{self.agent_name} ended working at {IAgent.current_time()}')
 
     def add_to_later(self) -> None:
         pass
 
-    def add_to_interesting(self) -> None:
+    def add_to_possible(self) -> None:
         pass
 
     def apply_to_vacancy(self) -> None:

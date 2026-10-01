@@ -1,9 +1,10 @@
 """
 Search agent base class.
 """
-
+import datetime
 from abc import abstractmethod, ABC
 
+from common_py_lib.entities.Formatter import TextAnsiFormatter
 from playwright.sync_api import sync_playwright, Browser, Page
 
 from core.entities.Vacancy import Vacancy
@@ -22,14 +23,14 @@ class IAgent(ABC):
     @abstractmethod
     def login(self) -> None:
         """
-        Login on agent (vendor) site
+        Login on agent (vendor) site, using playwright library
         """
         pass
 
     @abstractmethod
     def search(self) -> None:
         """
-        Search for vacancies on the site
+        Search stage for vacancies on the site
         """
         pass
 
@@ -41,7 +42,7 @@ class IAgent(ABC):
         pass
 
     @abstractmethod
-    def add_to_interesting(self) -> None:
+    def add_to_possible(self) -> None:
         pass
 
     @abstractmethod
@@ -52,9 +53,13 @@ class IAgent(ABC):
         pass
 
     @staticmethod
+    def current_time():
+        return datetime.datetime.now()
+
+    @staticmethod
     def open_browser(start_link: str) -> tuple[Browser, Page] | None:
         """
-        Open browser
+        Open browser and return pointers to it with page
         """
         print('Open browser')
         try:
@@ -68,4 +73,4 @@ class IAgent(ABC):
                 return browser, page
 
         except Exception as e:
-            print(f'Exception during initializing web browser: {e}')
+            TextAnsiFormatter.prRed(f'Exception during initializing web browser: {e}')

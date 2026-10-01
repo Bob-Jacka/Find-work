@@ -26,7 +26,7 @@ class Custom_company_agent(IAgent):
     def add_to_later(self) -> None:
         pass
 
-    def add_to_interesting(self) -> None:
+    def add_to_possible(self) -> None:
         pass
 
     def apply_to_vacancy(self) -> None:

@@ -4,17 +4,15 @@ from core.entities.Agents.Habr_agent import Habr_agent
 from core.entities.MyProfile import MyProfile
 from core.entities.Vacancy import Vacancy
 
-from core.utils.LW_process import LW_process
-
 try:
-    import common_py_lib
+    from common_py_lib.entities import LW_process
 except ModuleNotFoundError:
     print('Import private common py library first')
 
 
 def agent_create(vendor_name: str, config_ptr):
     """
-    Fabric method, create search agent
+    Fabric method, create search agent and return it
     param vendor_name: name of the company that hosts the site
     param config_ptr: pointer to config
     """
@@ -37,7 +35,7 @@ class App:
     favourites: list[Vacancy]  # favourite vacancies to apply on
     later_to_see: list[Vacancy]  # maybe in future apply
 
-    processes: list[LW_process]
+    processes: list[LW_process.LW_process]
 
     def __init__(self, config_ptr, logger_ptr):
         self.agents = list()
@@ -50,20 +48,20 @@ class App:
 
     def init_agents(self):
         """
-        Initialize agents in application
+        Initialize agents in application with vendor names
         """
         self.logger_ptr.log('Initializing agents:')
         for vendor_name in self.config_ptr.vacancy_sites.keys():
-            self.logger_ptr.log(f'Init agent: with vendor name {vendor_name}')
+            self.logger_ptr.log(f'Init agent: with vendor name {vendor_name.value()}')
             self.agents.append(agent_create(vendor_name, self.config_ptr))
 
     def start_app(self):
+        """
+        Start app execution loop
+        """
         self.logger_ptr.log('App starting')
         for agent in self.agents:
-            self.processes.append(LW_process(agent.agent_name, target=agent.search()))
-
-        while True:
-            pass
+            self.processes.append(LW_process.LW_process(agent.agent_name, target=agent.search()))
 
     def show_search_results(self):
         """
@@ -78,13 +76,17 @@ class App:
             print('\tWorkplace' + vacancy.workplace if vacancy.workplace is not None else 'No data')
             print('\tNeeded skills' + vacancy.skills)
 
-    def close_app(self):
-        for browser in self.config_ptr.browsers:
-            browser.close()
-        self.logger_ptr.log('App closing')
-
     def save_search_results(self, local: bool = True, remote: bool = False):
         """
         Save search results in remote or local devices
         """
-        pass
+        if local:
+            pass
+
+        if remote:
+            pass
+
+    def close_app(self):
+        for browser in self.config_ptr.browsers:
+            browser.close()
+        self.logger_ptr.log('App closing')
