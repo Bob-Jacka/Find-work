@@ -2,11 +2,10 @@ from playwright.sync_api import BrowserType  # TODO maybe delete browser type
 
 from core.data.Enums import Agent_vendor
 
-try:
-    from core.data.CurrentInfo import hh_site_link, habr_site_link
-except Exception as e:
-    print('No file with current Data for agents in app data directory')
-    exit(1)
+vacancy_sites_dict: dict[str, str] = {
+    'hh': 'https://izhevsk.hh.ru/?ysclid=mup5yzegb5277727803',
+    'habr': '',
+}
 
 
 class Config:
@@ -21,5 +20,17 @@ class Config:
         self.browsers = list()
 
         # add another vacancy site to config file:
-        self.vacancy_sites[Agent_vendor.HH] = hh_site_link
-        self.vacancy_sites[Agent_vendor.HABR] = habr_site_link
+        self.vacancy_sites[Agent_vendor.HH] = vacancy_sites_dict['hh']
+        self.vacancy_sites[Agent_vendor.HABR] = vacancy_sites_dict['habr']
+
+    def get_browser_ptr_by_name(self, browser_name: str):
+        return self.browsers
+
+    def get_all_browsers(self):
+        return self.browsers
+
+    def get_vacancy_site_by_name(self, site_name):
+        return self.vacancy_sites[site_name]
+
+    def get_all_vacany_sites(self):
+        return self.vacancy_sites

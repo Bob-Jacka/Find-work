@@ -1,6 +1,6 @@
 import unittest
 
-from core.entities import App
+from core.entities import Finder_runner
 from core.entities.Agents.Custom_company_agent import Custom_company_agent
 from core.entities.Agents.HH_agent import HH_agent
 from core.entities.Agents.Habr_agent import Habr_agent
@@ -16,7 +16,7 @@ class Other_tests(unittest.TestCase):
     """
 
     def test_should_create_agent_thought_fabric(self, config):
-        hh_agent = App.agent_create(vendor_name='hh', config_ptr=config)
+        hh_agent = Finder_runner.agent_create(vendor_name='hh', config_ptr=config)
         assert hh_agent is not None
 
 

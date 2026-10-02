@@ -5,9 +5,14 @@ from core.entities.MyProfile import MyProfile
 from core.entities.Vacancy import Vacancy
 
 try:
-    from common_py_lib.entities import LW_process
+    from common_py_lib.entities.LW_process import LW_process
 except ModuleNotFoundError:
     print('Import private common py library first')
+
+try:
+    from device_lib import LocalDevice
+except ModuleNotFoundError:
+    print('Import private local device lib first')
 
 
 def agent_create(vendor_name: str, config_ptr):
@@ -26,16 +31,16 @@ def agent_create(vendor_name: str, config_ptr):
             raise NotImplementedError('Implement type first')
 
 
-class App:
+class Finder_runner:
     """
-    Main class for application
+    Class for Finder runner that responsible for running agents in application
     """
     agents: list[IAgent]  # who will search
     profiles: list[MyProfile]  # it is not a secret that many peoples has many profiles
     favourites: list[Vacancy]  # favourite vacancies to apply on
     later_to_see: list[Vacancy]  # maybe in future apply
 
-    processes: list[LW_process.LW_process]
+    processes: list[LW_process]
 
     def __init__(self, config_ptr, logger_ptr):
         self.agents = list()
@@ -52,16 +57,16 @@ class App:
         """
         self.logger_ptr.log('Initializing agents:')
         for vendor_name in self.config_ptr.vacancy_sites.keys():
-            self.logger_ptr.log(f'Init agent: with vendor name {vendor_name.value()}')
+            self.logger_ptr.log(f'Init agent: with vendor name {vendor_name}')
             self.agents.append(agent_create(vendor_name, self.config_ptr))
 
-    def start_app(self):
+    def start_runner(self):
         """
         Start app execution loop
         """
-        self.logger_ptr.log('App starting')
+        self.logger_ptr.log('Runner starting')
         for agent in self.agents:
-            self.processes.append(LW_process.LW_process(agent.agent_name, target=agent.search()))
+            self.processes.append(LW_process(agent.agent_name, target=agent.search()))
 
     def show_search_results(self):
         """
@@ -81,12 +86,27 @@ class App:
         Save search results in remote or local devices
         """
         if local:
-            pass
+            self.__local_result_save()
 
         if remote:
-            pass
+            self.__remote_result_save()
 
-    def close_app(self):
+    def __local_result_save(self):
+        """
+        Save results locally on files or in terminal by device lib
+        """
+        pass
+
+    def __remote_result_save(self):
+        """
+        Save results remotely by device lib
+        """
+        pass
+
+    def close_runner(self):
+        """
+        Close finder runner and its browsers
+        """
         for browser in self.config_ptr.browsers:
             browser.close()
-        self.logger_ptr.log('App closing')
+        self.logger_ptr.log('Runner closing')

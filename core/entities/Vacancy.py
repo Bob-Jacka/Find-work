@@ -1,4 +1,9 @@
+"""
+File with Vacancy dataclass and its helper methods
+"""
+
 import dataclasses
+from typing import Sequence
 
 
 @dataclasses.dataclass(init=True, frozen=True)
@@ -15,7 +20,7 @@ class Vacancy:
     payment: float | None  # they pay money or not
 
 
-def vacancy_sorter(vacancies: list[Vacancy]) -> list[Vacancy]:
+def vacancy_sorter(vacancies: Sequence[Vacancy]) -> list[Vacancy]:
     """
     Sort vacancies in likely order
     :param vacancies: list with vacancy objects

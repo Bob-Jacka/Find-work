@@ -3,19 +3,7 @@ Main agent to use, because hh is the major
 """
 
 from core.entities.Agents.IAgent import IAgent
-
-
-class Page_objects:
-    class _Login_page:
-        telephone_field: str
-        sign_in_btn: str
-
-        def __init__(self, page):
-            pass
-
-    class _Vacancy_page:
-        def __init__(self, page):
-            pass
+from core.entities.Page_objects import Page_objects
 
 
 class HH_agent(IAgent):
@@ -27,15 +15,32 @@ class HH_agent(IAgent):
         self.later_see = list()
 
     def login(self) -> None:
-        browser, page = self.open_browser(self.config_ptr.vacancy_sites['hh'])
-        self.config_ptr.browsers.append(browser)
+        """
+        Login page actions pipeline
+        """
+        self.browser, self.page = self.open_browser(self.config_ptr.vacancy_sites['hh'])
+        self.config_ptr.browsers.append(self.browser)
+        login_page = Page_objects.Login_page()
+        login_page.add_element('login_field', '')
+        login_page.add_element('password_field', '')
+        login_page.add_behaviour('authenticate', lambda: None)
 
-        login_page = Page_objects._Login_page(page)
+        self.vacancy()
+        # Go to vacancy page
+
+    def vacancy(self):
+        """
+        Vacancy page actions pipeline
+        """
+        Page_objects.proceed_to_page(self.page, '')
+        vacancy_page = Page_objects.Vacancy_page()
 
     def search(self) -> None:
+        # For vacancy page only
         print(f'{self.agent_name} started working at {IAgent.current_time()}')
         # search logic:
         self.login()
+
         print(f'{self.agent_name} ended working at {IAgent.current_time()}')
 
     def add_to_later(self) -> None:
